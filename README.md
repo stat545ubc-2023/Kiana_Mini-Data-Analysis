@@ -4,7 +4,7 @@ Kiana Yazdani\
 The University of British Columbia\
 Fall 2023
 
-# [Project Description]{style="color:purple;"}
+# Project Description
 
 This is a Mini Data Analysis Project with two milestones. The learning objectives for this project are to design a research question, prepare the data, analyze the data, and develop a report. Moreover, the goal is to gain experience using dplyr packages for data manipulation, ggplot2 for visualization, and tidyverse packages for modelling.
 
@@ -33,7 +33,7 @@ This is a Mini Data Analysis Project with two milestones. The learning objective
 -   **MDA_Deliverable1.Rmd:** This is the R markdown document for M1 that includes detailed codes and instructions.
 -   **MDA_Deliverable1.md:** This is the .md output (knitted markdown)
 
-# [Collaboration]{style="color:purple;"}
+# Collaboration
 
 -   To access this project online, just click on the Markdown file. If you wish to obtain a copy of the project, select "Download ZIP" and then open the files using R/RStudio.
 
