@@ -6,10 +6,10 @@ author: |
 output:
   github_document:
     toc: true
-
 ---
 
 # Getting Started
+
 Welcome to your (maybe) first-ever data analysis project! And hopefully the first of many. Let's get started:
 
 ## Packages and Libraries
@@ -37,7 +37,7 @@ library(tidyverse)
 
 3.  Make a repository in the <https://github.com/stat545ubc-2023> Organization. You can do this by following the steps found on canvas in the entry called [MDA: Create a repository](https://canvas.ubc.ca/courses/126199/pages/mda-create-a-repository). One completed, your repository should automatically be listed as part of the stat545ubc-2023 Organization.
 
-### [Kiana's MDA Repository]{style="color:red;"}
+### Kiana's MDA Repository
 
 -   **You can find my repository following this link:** [KianaYazdani.MDARep](https://github.com/stat545ubc-2023/Kiana_Mini-Data-Analysis.git)
 
@@ -115,10 +115,9 @@ And that is exactly the first thing that you will do!
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Initial Data Exploration:** 
-To explore each of the four datasets, I will use a combination of base R and dplyr functions.
+**Initial Data Exploration:** To explore each of the four datasets, I will use a combination of base R and dplyr functions.
 
-## [**Exploring the *"cancer_sample"* dataset:**]{style="color:purple;"}
+## **Exploring the *"cancer_sample"* dataset:**
 
 > The cancer_sample dataset has 569 rows and 32 columns, only one of which is a character string. The data frame is tibble. Some of the variables within this dataset require domain-specific expertise for full comprehension.
 
@@ -137,8 +136,8 @@ tail(cancer_sample)  #Use tail() to view the last few rows
 
 ### dplyr Functions###
 
-glimpse(cancer_sample)
-class(cancer_sample)
+glimpse(cancer_sample) # view the first few rows
+class(cancer_sample) #explore data type
 
 #Extract a single column [perimeter_worst] using pull()
 perimeter_vector <- cancer_sample %>%
@@ -157,7 +156,7 @@ dx_count <- cancer_sample %>%
 print(dx_count)
 ```
 
-## [**Exploring the *"flow_sample"* dataset:**]{style="color:purple;"}
+## **Exploring the *"flow_sample"* dataset:**
 
 > The flow_sample dataset has 218 rows and 7 columns. Three variables are character strings. Compared to other datasets, it is smaller and less complicated. The data frame is also a tibble.
 
@@ -165,16 +164,16 @@ print(dx_count)
 ### Explore The Flow Sample Dataset###
 
 ### Base R Functions###
-view(flow_sample)
-str(flow_sample)
-dim(flow_sample)
-names(flow_sample)
+view(flow_sample) #look inside dataset 
+str(flow_sample) #dataset structure
+dim(flow_sample) #dataset dimension
+names(flow_sample)  #retrieve the column names of the data
 summary(flow_sample) #Examine summary statistics for each variable in the dataset
 
 ### dplyr Functions###
 
-glimpse(flow_sample)
-class(flow_sample)
+glimpse(flow_sample)# view the first few rows
+class(flow_sample)# data type
 
 #Select Column "sym"
 flow_sym <- flow_sample %>%
@@ -206,7 +205,7 @@ print(sorted_grouped_data3)
 
 ```
 
-## [**Exploring the *"building_permits"* dataset:**]{style="color:purple;"}
+## **Exploring the *"building_permits"* dataset:**
 
 > This dataset has 20,680 rows and 14 columns. Three variables are numeric and one is a date variable. The data frame is tibble. It is a relatively large dataset.
 
@@ -237,7 +236,7 @@ freq_worktype <- building_permits %>%
   count(type_of_work)
 print(freq_worktype)
 
-#property_use
+#property_use frequency
 freq_prop_use <- building_permits %>%
   count(property_use)
 print(freq_prop_use)
@@ -250,7 +249,7 @@ print(proj.value_worktype)
 
 ```
 
-## [**Exploring the *"vancouver_trees"* dataset:**]{style="color:purple;"}
+## **Exploring the *"vancouver_trees"* dataset:**
 
 > The Vancouver_tree dataset has 146,611 rows and 20 columns. It is the largest dataset that I have examined among the selected four. It has a nice combination of character, double precision, and date variables. It is also a tibble.
 
@@ -292,7 +291,7 @@ print(freq_genusLE10)
 
 <!-------------------------- Start your work below ---------------------------->
 
-## [Finale Dataset and Rationale]{style="color:red;"}
+## Finale Dataset and Rationale
 
 -   I have opted to work with the dataset **"building_permits"**.
 -   The dataset comprises 20,680 observations and consists of 14 columns.
@@ -305,10 +304,9 @@ print(freq_genusLE10)
 
 <!-------------------------- Start your work below ---------------------------->
 
-## [Research Question]{style="color:red;"} 
+## Research Question
 
 1.  I am interested in exploring the relationship between "project_value" and "type_of_work".
-
 
 <!----------------------------------------------------------------------------->
 
@@ -339,7 +337,7 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 
 <!-------------------------- Start your work below ---------------------------->
 
-## [**Introduction**]{style="color:purple;"}
+## **Introduction**
 
 This is an R approach to the Building_Permits Exploratory Mini Data Analysis. I'm mainly using *dplyr* for data manipulation and *ggplot2* for visualization. Later, I will be also using *tidyverse* packages for modelling. There are four steps in this task.
 
@@ -348,7 +346,7 @@ This is an R approach to the Building_Permits Exploratory Mini Data Analysis. I'
 -   **Step 3:** Create a new variable
 -   **Step 4:** Explore Two Variables' Relationship
 
-## [**Step 1: Create a Subset of the Data**]{style="color:purple;"}
+## **Step 1: Create a Subset of the Data**
 
 -   I choose to start task #2 with exercise 7: "Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring."
 
@@ -369,7 +367,7 @@ glimpse(building_subset)
 
 ```
 
-## [**Step 2: Identify Missing Values**]{style="color:purple;"}
+## **Step 2: Identify Missing Values**
 
 **Rationale:** It is important to identify missing values early on in the analysis for several reasons:
 
@@ -422,7 +420,7 @@ print(missing_plot2)
 
 ```
 
-## [**Step 3: Create a New Variable**]{style="color:purple;"}
+## **Step 3: Create a New Variable**
 
 -   Now, I would like to create a new variable according to the values of the project_value.
 
@@ -472,7 +470,7 @@ print(freq_proj.val_cat)
 
 ```
 
-## [**Step 4: Explore Two Variables' Relationship**]{style="color:purple;"}
+## **Step 4: Explore Two Variables' Relationship**
 
 -   In this step, I would like to explore the relationship between the type of work and different categories of project_value. I will also explore the relationship between mean project_value and different work types.
 -   **Rationale:** I want to understand what types of work are associated with higher or lower project values.
@@ -510,8 +508,8 @@ ggplot(prepared_building_data2, aes(x = type_of_work, fill = value)) +
   geom_bar(position = "dodge") +
   labs(title = "Distribution of Project Values by Work Type", x = "Work Type", y = "Project Value")
 
-#Calculate the mean of project_value by work type
 
+#Calculate the mean of project_value by work type
 mean_projval_worktype <- prepared_building_data2%>%
   group_by(type_of_work) %>%
   summarise(mean=mean(project_value))

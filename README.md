@@ -6,7 +6,7 @@ Fall 2023
 
 # Project Description
 
-This is a Mini Data Analysis Project with two milestones. The learning objectives for this project are to design a research question, prepare the data, analyze the data, and develop a report. Moreover, the goal is to gain experience using _dplyr_ packages for data manipulation, _ggplot2_ for visualization, and _tidyverse_ packages for modelling.
+This is a Mini Data Analysis Project with two milestones. The learning objectives for this project are to design a research question, prepare the data, analyze the data, and develop a report. Moreover, the goal is to gain experience using *dplyr* packages for data manipulation, *ggplot2* for visualization, and *tidyverse* packages for modelling.
 
 ## **Milestone 1**
 
@@ -36,7 +36,7 @@ This is a Mini Data Analysis Project with two milestones. The learning objective
 # Collaboration
 
 -   To access this project online, just click on the Markdown file
--    If you wish to obtain a copy of the project, select "Download ZIP" and then open the files using R/RStudio
+-   If you wish to obtain a copy of the project, select "Download ZIP" and then open the files using R/RStudio
 
 **For collaboration or cloning purposes:**
 

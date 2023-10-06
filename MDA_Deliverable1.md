@@ -7,36 +7,32 @@ Kiana Yazdani
 - [Getting Started](#getting-started)
   - [Packages and Libraries](#packages-and-libraries)
   - [GitHub Repository](#github-repository)
-    - [<span style="color:red;">Kiana’s MDA
-      Repository</span>](#kianas-mda-repository)
+    - [Kiana’s MDA Repository](#kianas-mda-repository)
 - [Assignment Instructions](#assignment-instructions)
   - [For Both Milestones](#for-both-milestones)
   - [For Milestone 1](#for-milestone-1)
     - [Learning Objectives](#learning-objectives)
 - [**Task 1:** Choose Your Favorite
   Dataset](#task-1-choose-your-favorite-dataset)
-  - [<span style="color:purple;">**Exploring the *“cancer_sample”*
-    dataset:**</span>](#exploring-the-cancer_sample-dataset)
-  - [<span style="color:purple;">**Exploring the *“flow_sample”*
-    dataset:**</span>](#exploring-the-flow_sample-dataset)
-  - [<span style="color:purple;">**Exploring the *“building_permits”*
-    dataset:**</span>](#exploring-the-building_permits-dataset)
-  - [<span style="color:purple;">**Exploring the *“vancouver_trees”*
-    dataset:**</span>](#exploring-the-vancouver_trees-dataset)
-  - [<span style="color:red;">Finale Dataset and
-    Rationale</span>](#finale-dataset-and-rationale)
-  - [<span style="color:red;">Research
-    Question</span>](#research-question)
+  - [**Exploring the *“cancer_sample”*
+    dataset:**](#exploring-the-cancer_sample-dataset)
+  - [**Exploring the *“flow_sample”*
+    dataset:**](#exploring-the-flow_sample-dataset)
+  - [**Exploring the *“building_permits”*
+    dataset:**](#exploring-the-building_permits-dataset)
+  - [**Exploring the *“vancouver_trees”*
+    dataset:**](#exploring-the-vancouver_trees-dataset)
+  - [Finale Dataset and Rationale](#finale-dataset-and-rationale)
+  - [Research Question](#research-question)
 - [**Task 2:** Exploring Your Dataset](#task-2-exploring-your-dataset)
-  - [<span style="color:purple;">**Introduction**</span>](#introduction)
-  - [<span style="color:purple;">**Step 1: Create a Subset of the
-    Data**</span>](#step-1-create-a-subset-of-the-data)
-  - [<span style="color:purple;">**Step 2: Identify Missing
-    Values**</span>](#step-2-identify-missing-values)
-  - [<span style="color:purple;">**Step 3: Create a New
-    Variable**</span>](#step-3-create-a-new-variable)
-  - [<span style="color:purple;">**Step 4: Explore Two Variables’
-    Relationship**</span>](#step-4-explore-two-variables-relationship)
+  - [**Introduction**](#introduction)
+  - [**Step 1: Create a Subset of the
+    Data**](#step-1-create-a-subset-of-the-data)
+  - [**Step 2: Identify Missing
+    Values**](#step-2-identify-missing-values)
+  - [**Step 3: Create a New Variable**](#step-3-create-a-new-variable)
+  - [**Step 4: Explore Two Variables’
+    Relationship**](#step-4-explore-two-variables-relationship)
 - [**Task 3:** Choose Research
   Questions](#task-3-choose-research-questions)
 - [Overall reproducibility/Cleanliness/Coherence
@@ -107,7 +103,7 @@ library(tidyverse)
     One completed, your repository should automatically be listed as
     part of the stat545ubc-2023 Organization.
 
-### <span style="color:red;">Kiana’s MDA Repository</span>
+### Kiana’s MDA Repository
 
 - **You can find my repository following this link:**
   [KianaYazdani.MDARep](https://github.com/stat545ubc-2023/Kiana_Mini-Data-Analysis.git)
@@ -242,7 +238,7 @@ comments outside of the code chunk?
 **Initial Data Exploration:** To explore each of the four datasets, I
 will use a combination of base R and dplyr functions.
 
-## <span style="color:purple;">**Exploring the *“cancer_sample”* dataset:**</span>
+## **Exploring the *“cancer_sample”* dataset:**
 
 > The cancer_sample dataset has 569 rows and 32 columns, only one of
 > which is a character string. The data frame is tibble. Some of the
@@ -399,7 +395,7 @@ tail(cancer_sample)  #Use tail() to view the last few rows
 ``` r
 ### dplyr Functions###
 
-glimpse(cancer_sample)
+glimpse(cancer_sample) # view the first few rows
 ```
 
     ## Rows: 569
@@ -438,7 +434,7 @@ glimpse(cancer_sample)
     ## $ fractal_dimension_worst <dbl> 0.11890, 0.08902, 0.08758, 0.17300, 0.07678, 0…
 
 ``` r
-class(cancer_sample)
+class(cancer_sample) #explore data type
 ```
 
     ## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
@@ -467,7 +463,7 @@ print(dx_count)
     ## 1 B           357
     ## 2 M           212
 
-## <span style="color:purple;">**Exploring the *“flow_sample”* dataset:**</span>
+## **Exploring the *“flow_sample”* dataset:**
 
 > The flow_sample dataset has 218 rows and 7 columns. Three variables
 > are character strings. Compared to other datasets, it is smaller and
@@ -477,8 +473,8 @@ print(dx_count)
 ### Explore The Flow Sample Dataset###
 
 ### Base R Functions###
-view(flow_sample)
-str(flow_sample)
+view(flow_sample) #look inside dataset 
+str(flow_sample) #dataset structure
 ```
 
     ## tibble [218 × 7] (S3: tbl_df/tbl/data.frame)
@@ -491,13 +487,13 @@ str(flow_sample)
     ##  $ sym         : chr [1:218] NA NA NA NA ...
 
 ``` r
-dim(flow_sample)
+dim(flow_sample) #dataset dimension
 ```
 
     ## [1] 218   7
 
 ``` r
-names(flow_sample)
+names(flow_sample)  #retrieve the column names of the data
 ```
 
     ## [1] "station_id"   "year"         "extreme_type" "month"        "day"         
@@ -527,7 +523,7 @@ summary(flow_sample) #Examine summary statistics for each variable in the datase
 ``` r
 ### dplyr Functions###
 
-glimpse(flow_sample)
+glimpse(flow_sample)# view the first few rows
 ```
 
     ## Rows: 218
@@ -541,7 +537,7 @@ glimpse(flow_sample)
     ## $ sym          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
 
 ``` r
-class(flow_sample)
+class(flow_sample)# data type
 ```
 
     ## [1] "tbl_df"     "tbl"        "data.frame"
@@ -606,7 +602,7 @@ print(sorted_grouped_data3)
     ## 1 maximum         212.  
     ## 2 minimum           6.27
 
-## <span style="color:purple;">**Exploring the *“building_permits”* dataset:**</span>
+## **Exploring the *“building_permits”* dataset:**
 
 > This dataset has 20,680 rows and 14 columns. Three variables are
 > numeric and one is a date variable. The data frame is tibble. It is a
@@ -741,7 +737,7 @@ print(freq_worktype)
     ## 6 Temporary Building / Structure         217
 
 ``` r
-#property_use
+#property_use frequency
 freq_prop_use <- building_permits %>%
   count(property_use)
 print(freq_prop_use)
@@ -780,7 +776,7 @@ print(proj.value_worktype)
     ## 5 Salvage and Abatement                         6212.
     ## 6 Temporary Building / Structure               69237.
 
-## <span style="color:purple;">**Exploring the *“vancouver_trees”* dataset:**</span>
+## **Exploring the *“vancouver_trees”* dataset:**
 
 > The Vancouver_tree dataset has 146,611 rows and 20 columns. It is the
 > largest dataset that I have examined among the selected four. It has a
@@ -931,7 +927,7 @@ to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-## <span style="color:red;">Finale Dataset and Rationale</span>
+## Finale Dataset and Rationale
 
 - I have opted to work with the dataset **“building_permits”**.
 - The dataset comprises 20,680 observations and consists of 14 columns.
@@ -952,7 +948,7 @@ dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-## <span style="color:red;">Research Question</span>
+## Research Question
 
 1.  I am interested in exploring the relationship between
     “project_value” and “type_of_work”.
@@ -1023,7 +1019,7 @@ sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
 
-## <span style="color:purple;">**Introduction**</span>
+## **Introduction**
 
 This is an R approach to the Building_Permits Exploratory Mini Data
 Analysis. I’m mainly using *dplyr* for data manipulation and *ggplot2*
@@ -1035,7 +1031,7 @@ modelling. There are four steps in this task.
 - **Step 3:** Create a new variable
 - **Step 4:** Explore Two Variables’ Relationship
 
-## <span style="color:purple;">**Step 1: Create a Subset of the Data**</span>
+## **Step 1: Create a Subset of the Data**
 
 - I choose to start task \#2 with exercise 7: “Make a new tibble with a
   subset of your data, with variables and observations that you are
@@ -1074,7 +1070,7 @@ glimpse(building_subset)
     ## $ year                  <dbl> 2017, 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
     ## $ bi_id                 <dbl> 524, 535, 539, 541, 543, 546, 547, 548, 549, 550…
 
-## <span style="color:purple;">**Step 2: Identify Missing Values**</span>
+## **Step 2: Identify Missing Values**
 
 **Rationale:** It is important to identify missing values early on in
 the analysis for several reasons:
@@ -1136,7 +1132,7 @@ print(missing_plot2)
 
 ![](MDA_Deliverable1_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
-## <span style="color:purple;">**Step 3: Create a New Variable**</span>
+## **Step 3: Create a New Variable**
 
 - Now, I would like to create a new variable according to the values of
   the project_value.
@@ -1226,7 +1222,7 @@ print(freq_proj.val_cat)
     ## 8 Tens                  1
     ## 9 Thousands          1520
 
-## <span style="color:purple;">**Step 4: Explore Two Variables’ Relationship**</span>
+## **Step 4: Explore Two Variables’ Relationship**
 
 - In this step, I would like to explore the relationship between the
   type of work and different categories of project_value. I will also
@@ -1297,7 +1293,6 @@ ggplot(prepared_building_data2, aes(x = type_of_work, fill = value)) +
 
 ``` r
 #Calculate the mean of project_value by work type
-
 mean_projval_worktype <- prepared_building_data2%>%
   group_by(type_of_work) %>%
   summarise(mean=mean(project_value))
