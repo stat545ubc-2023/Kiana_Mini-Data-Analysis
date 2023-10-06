@@ -1,0 +1,587 @@
+---
+title: "Mini Data Analysis Deliverable 1"
+date: "2023-10-05"
+author: |
+ Kiana Yazdani
+output:
+  github_document:
+    toc: true
+
+---
+
+# Getting Started
+Welcome to your (maybe) first-ever data analysis project! And hopefully the first of many. Let's get started:
+
+## Packages and Libraries
+
+1.  Install the [`datateachr`](https://github.com/UBC-MDS/datateachr) package by typing the following into your **R terminal**:
+
+<!-- -->
+
+```         
+install.packages("datateachr")
+install.packages("devtools")
+devtools::install_github("UBC-MDS/datateachr")
+```
+
+2.  Load the packages below.
+
+```{r}
+library(datateachr)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+```
+
+## GitHub Repository
+
+3.  Make a repository in the <https://github.com/stat545ubc-2023> Organization. You can do this by following the steps found on canvas in the entry called [MDA: Create a repository](https://canvas.ubc.ca/courses/126199/pages/mda-create-a-repository). One completed, your repository should automatically be listed as part of the stat545ubc-2023 Organization.
+
+### [Kiana's MDA Repository]{style="color:red;"}
+
+-   **You can find my repository following this link:** [KianaYazdani.MDARep](https://github.com/stat545ubc-2023/Kiana_Mini-Data-Analysis.git)
+
+# Assignment Instructions
+
+## For Both Milestones
+
+-   Each milestone has explicit tasks. Tasks that are more challenging will often be allocated more points.
+
+-   Each milestone will be also graded for reproducibility, cleanliness, and coherence of the overall Github submission.
+
+-   While the two milestones will be submitted as independent deliverables, the analysis itself is a continuum - think of it as two chapters to a story. Each chapter, or in this case, portion of your analysis, should be easily followed through by someone unfamiliar with the content. [Here](https://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/) is a good resource for what constitutes "good code". Learning good coding practices early in your career will save you hassle later on!
+
+-   The milestones will be equally weighted.
+
+## For Milestone 1
+
+**To complete this milestone**, edit [this very `.Rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-1.Rmd) directly. Fill in the sections that are tagged with `<!--- start your work below --->`.
+
+**To submit this milestone**, make sure to knit this `.Rmd` file to an `.md` file by changing the YAML output settings from `output: html_document` to `output: github_document`. Commit and push all of your work to the mini-analysis GitHub repository you made earlier, and tag a release on GitHub. Then, submit a link to your tagged release on canvas.
+
+**Points**: This milestone is worth 36 points: 30 for your analysis, and 6 for overall reproducibility, cleanliness, and coherence of the Github submission.
+
+### Learning Objectives
+
+By the end of this milestone, you should:
+
+-   Become familiar with your dataset of choosing
+-   Select 4 questions that you would like to answer with your data
+-   Generate a reproducible and clear report using R Markdown
+-   Become familiar with manipulating and summarizing your data in tibbles using `dplyr`, with a research question in mind.
+
+# **Task 1:** Choose Your Favorite Dataset
+
+The `datateachr` package by Hayley Boyce and Jordan Bourak currently composed of 7 semi-tidy datasets for educational purposes. Here is a brief description of each dataset:
+
+-   *apt_buildings*: Acquired courtesy of The City of Toronto's Open Data Portal. It currently has 3455 rows and 37 columns.
+
+-   *building_permits*: Acquired courtesy of The City of Vancouver's Open Data Portal. It currently has 20680 rows and 14 columns.
+
+-   *cancer_sample*: Acquired courtesy of UCI Machine Learning Repository. It currently has 569 rows and 32 columns.
+
+-   *flow_sample*: Acquired courtesy of The Government of Canada's Historical Hydrometric Database. It currently has 218 rows and 7 columns.
+
+-   *parking_meters*: Acquired courtesy of The City of Vancouver's Open Data Portal. It currently has 10032 rows and 22 columns.
+
+-   *steam_games*: Acquired courtesy of Kaggle. It currently has 40833 rows and 21 columns.
+
+-   *vancouver_trees*: Acquired courtesy of The City of Vancouver's Open Data Portal. It currently has 146611 rows and 20 columns.
+
+**Things to keep in mind**
+
+-   We hope that this project will serve as practice for carrying out your own *independent* data analysis. Remember to comment your code, be explicit about what you are doing, and write notes in this markdown document when you feel that context is required. As you advance in the project, prompts and hints to do this will be diminished - it'll be up to you!
+
+-   Before choosing a dataset, you should always keep in mind **your goal**, or in other ways, *what you wish to achieve with this data*. This mini data-analysis project focuses on *data wrangling*, *tidying*, and *visualization*. In short, it's a way for you to get your feet wet with exploring data on your own.
+
+And that is exactly the first thing that you will do!
+
+1.1 **(1 point)** Out of the 7 datasets available in the `datateachr` package, choose **4** that appeal to you based on their description. Write your choices below:
+
+**Note**: We encourage you to use the ones in the `datateachr` package, but if you have a dataset that you'd really like to use, you can include it here. But, please check with a member of the teaching team to see whether the dataset is of appropriate complexity. Also, include a **brief** description of the dataset here to help the teaching team understand your data.
+
+<!-------------------------- Start your work below ---------------------------->
+
+1: CHOICE_1_cancer_sample\
+2: CHOICE_2_flow_sample\
+3: CHOICE_3_building_permits\
+4: CHOICE_4_vancouver_trees\
+
+<!----------------------------------------------------------------------------->
+
+1.2 **(6 points)** One way to narrowing down your selection is to *explore* the datasets. Use your knowledge of dplyr to find out at least *3* attributes about each of these datasets (an attribute is something such as number of rows, variables, class type...). The goal here is to have an idea of *what the data looks like*.
+
+*Hint:* This is one of those times when you should think about the cleanliness of your analysis. I added a single code chunk for you below, but do you want to use more than one? Would you like to write more comments outside of the code chunk?
+
+<!-------------------------- Start your work below ---------------------------->
+
+**Initial Data Exploration:** 
+To explore each of the four datasets, I will use a combination of base R and dplyr functions.
+
+## [**Exploring the *"cancer_sample"* dataset:**]{style="color:purple;"}
+
+> The cancer_sample dataset has 569 rows and 32 columns, only one of which is a character string. The data frame is tibble. Some of the variables within this dataset require domain-specific expertise for full comprehension.
+
+```{r}
+### Explore The Cancer_Sample Dataset###
+
+### Base R Functions###
+
+view(cancer_sample)#look inside the dataset
+str(cancer_sample) #dataset structure
+dim(cancer_sample) #dataset dimensions
+names(cancer_sample) #retrieve the column names of the data
+head(cancer_sample)  #Use head() to view the first few rows
+tail(cancer_sample)  #Use tail() to view the last few rows
+
+
+### dplyr Functions###
+
+glimpse(cancer_sample)
+class(cancer_sample)
+
+#Extract a single column [perimeter_worst] using pull()
+perimeter_vector <- cancer_sample %>%
+  pull(perimeter_worst)
+
+#Select a specific column [diagnosis] using select()
+select_dx <- cancer_sample %>%
+  select(diagnosis)
+
+#Difference between pull() and select(): 
+#Depends on whether you need the entire column as a standalone vector or a subset of columns in the form of a data frame
+
+#Examine the frequency of a column [diagnosis] using count()
+dx_count <- cancer_sample %>%
+  count(diagnosis)
+print(dx_count)
+```
+
+## [**Exploring the *"flow_sample"* dataset:**]{style="color:purple;"}
+
+> The flow_sample dataset has 218 rows and 7 columns. Three variables are character strings. Compared to other datasets, it is smaller and less complicated. The data frame is also a tibble.
+
+```{r}
+### Explore The Flow Sample Dataset###
+
+### Base R Functions###
+view(flow_sample)
+str(flow_sample)
+dim(flow_sample)
+names(flow_sample)
+summary(flow_sample) #Examine summary statistics for each variable in the dataset
+
+### dplyr Functions###
+
+glimpse(flow_sample)
+class(flow_sample)
+
+#Select Column "sym"
+flow_sym <- flow_sample %>%
+  select(sym)
+
+#Column "sym" Frequency
+flow_sym2 <- flow_sample %>%
+  count(sym)
+print(flow_sym2)
+
+sorted_grouped_data <- flow_sample %>% #pipe in the data
+  arrange(year) %>% #sort data by year
+  group_by(extreme_type) %>% #group the sorted data by extreme_type
+  count(extreme_type) #examine the frequency of extreme_type
+print(sorted_grouped_data)
+
+
+sorted_grouped_data2 <- flow_sample %>% #pipe in the data
+  arrange(year) %>%  #sort data by year
+  summarise(mean_flow=mean(flow, na.rm=TRUE)) #calculate mean flow and remove NA observations
+print(sorted_grouped_data2)
+
+
+sorted_grouped_data3 <- flow_sample %>% #pipe in the data
+  arrange(year) %>%  #sort data by year
+  group_by(extreme_type) %>% #group by extreme_type
+  summarise(mean_flow=mean(flow, na.rm=TRUE)) #calculate mean flow by group and remove NAs
+print(sorted_grouped_data3)
+
+```
+
+## [**Exploring the *"building_permits"* dataset:**]{style="color:purple;"}
+
+> This dataset has 20,680 rows and 14 columns. Three variables are numeric and one is a date variable. The data frame is tibble. It is a relatively large dataset.
+
+```{r}
+### Explore Dataset Building Permits###   
+
+### Base R Functions###
+
+view(building_permits)
+str(building_permits)
+dim(building_permits)
+names(building_permits)
+
+
+### dplyr Functions###
+
+glimpse(building_permits)
+class(building_permits)
+
+#Find unique values in column project_value
+unique_proj.val <- building_permits %>%
+  distinct(project_value)
+print(unique_proj.val)
+
+
+#type_of_work frequency
+freq_worktype <- building_permits %>%
+  count(type_of_work)
+print(freq_worktype)
+
+#property_use
+freq_prop_use <- building_permits %>%
+  count(property_use)
+print(freq_prop_use)
+
+#calculate mean project value by group work type and remove NAs
+proj.value_worktype <- building_permits %>%
+  group_by(type_of_work) %>% #group by work type
+  summarise(mean_projvalue=mean(project_value, na.rm=TRUE)) 
+print(proj.value_worktype)
+
+```
+
+## [**Exploring the *"vancouver_trees"* dataset:**]{style="color:purple;"}
+
+> The Vancouver_tree dataset has 146,611 rows and 20 columns. It is the largest dataset that I have examined among the selected four. It has a nice combination of character, double precision, and date variables. It is also a tibble.
+
+```{r}
+### Explore Dataset Vancouver Trees###
+
+### Base R Functions###
+
+view(vancouver_trees)
+str(vancouver_trees)
+dim(vancouver_trees)
+names(vancouver_trees)
+
+### dplyr Functions###
+
+glimpse(vancouver_trees)
+class(vancouver_trees)
+
+#Select specific columns
+selected_data <- vancouver_trees %>%
+  select(tree_id, date_planted, genus_name, species_name, cultivar_name, common_name, assigned, root_barrier, plant_area,   neighbourhood_name, street_side_name, diameter, longitude, latitude)
+
+#Examine frequency of genus_name
+freq_genus <- vancouver_trees %>%
+  count(genus_name)
+print(freq_genus)
+
+#Filter genus_name = ARAUCARIA
+freq_genusLE10 <- vancouver_trees %>%
+  filter(genus_name=='ARAUCARIA')
+print(freq_genusLE10)
+
+
+```
+
+<!----------------------------------------------------------------------------->
+
+1.3 **(1 point)** Now that you've explored the 4 datasets that you were initially most interested in, let's narrow it down to 1. What lead you to choose this one? Briefly explain your choice below.
+
+<!-------------------------- Start your work below ---------------------------->
+
+## [Finale Dataset and Rationale]{style="color:red;"}
+
+-   I have opted to work with the dataset **"building_permits"**.
+-   The dataset comprises 20,680 observations and consists of 14 columns.
+-   The volume of observations falls within the sweet spot of being neither overly extensive nor too modest, making it ideal for generating generalizable insights.
+-   It boasts a well-balanced mix of both character and numeric values, including date data.
+
+<!----------------------------------------------------------------------------->
+
+1.4 **(2 points)** Time for a final decision! Going back to the beginning, it's important to have an *end goal* in mind. For example, if I had chosen the `titanic` dataset for my project, I might've wanted to explore the relationship between survival and other variables. Try to think of 1 research question that you would want to answer with your dataset. Note it down below.
+
+<!-------------------------- Start your work below ---------------------------->
+
+## [Research Question]{style="color:red;"} 
+
+1.  I am interested in exploring the relationship between "project_value" and "type_of_work".
+
+
+<!----------------------------------------------------------------------------->
+
+**Important note:**
+
+Read Tasks 2 and 3 *fully* before starting to complete either of them. Probably also a good point to grab a coffee to get ready for the fun part!
+
+This project is semi-guided, but meant to be *independent*. For this reason, you will complete tasks 2 and 3 below (under the **START HERE** mark) as if you were writing your own exploratory data analysis report, and this guidance never existed! Feel free to add a brief introduction section to your project, format the document with markdown syntax as you deem appropriate, and structure the analysis as you deem appropriate. If you feel lost, you can find a sample data analysis [here](https://www.kaggle.com/headsortails/tidy-titarnic) to have a better idea. However, bear in mind that it is **just an example** and you will not be required to have that level of complexity in your project.
+
+# **Task 2:** Exploring Your Dataset
+
+If we rewind and go back to the learning objectives, you'll see that by the end of this deliverable, you should have formulated *4* research questions about your data that you may want to answer during your project. However, it may be handy to do some more exploration on your dataset of choice before creating these questions - by looking at the data, you may get more ideas. **Before you start this task, read all instructions carefully until you reach START HERE under Task 3**.
+
+2.1 **(12 points)** Complete *4 out of the following 8 exercises* to dive deeper into your data. All datasets are different and therefore, not all of these tasks may make sense for your data - which is why you should only answer *4*.
+
+Make sure that you're using dplyr and ggplot2 rather than base R for this task. Outside of this project, you may find that you prefer using base R functions for certain tasks, and that's just fine! But part of this project is for you to practice the tools we learned in class, which is dplyr and ggplot2.
+
+1.  Plot the distribution of a numeric variable.
+2.  Create a new variable based on other variables in your data (only if it makes sense)
+3.  Investigate how many missing values there are per variable. Can you find a way to plot this?
+4.  Explore the relationship between 2 variables in a plot.
+5.  Filter observations in your data according to your own criteria. Think of what you'd like to explore - again, if this was the `titanic` dataset, I may want to narrow my search down to passengers born in a particular year...
+6.  Use a boxplot to look at the frequency of different observations within a single variable. You can do this for more than one variable if you wish!
+7.  Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring.
+8.  Use a density plot to explore any of your variables (that are suitable for this type of plot).
+
+2.2 **(4 points)** For each of the 4 exercises that you complete, provide a *brief explanation* of why you chose that exercise in relation to your data (in other words, why does it make sense to do that?), and sufficient comments for a reader to understand your reasoning and code.
+
+<!-------------------------- Start your work below ---------------------------->
+
+## [**Introduction**]{style="color:purple;"}
+
+This is an R approach to the Building_Permits Exploratory Mini Data Analysis. I'm mainly using *dplyr* for data manipulation and *ggplot2* for visualization. Later, I will be also using *tidyverse* packages for modelling. There are four steps in this task.
+
+-   **Step 1:** Create a Subset of the Data
+-   **Step 2:** Identify missing values
+-   **Step 3:** Create a new variable
+-   **Step 4:** Explore Two Variables' Relationship
+
+## [**Step 1: Create a Subset of the Data**]{style="color:purple;"}
+
+-   I choose to start task #2 with exercise 7: "Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring."
+
+-   The **rationale** behind this decision is that, for addressing my specific research inquiries, I don't require all the variables present in the building_permits dataset. Utilizing a subset of the data would be a more optimal choice.
+
+    **Note:** I understand that the data frame is already a tibble. loading the *tibble* library and using the *as_tibble* statement is only for reviewing purposes!
+
+```{r}
+#load the tibble library
+library(tibble)
+
+#make a tibble and a subset of data
+building_subset <- as_tibble(building_permits) %>%
+  select(permit_number, issue_date, project_value, type_of_work, building_contractor, property_use, specific_use_category, year, bi_id)
+
+#print the subset data
+glimpse(building_subset)
+
+```
+
+## [**Step 2: Identify Missing Values**]{style="color:purple;"}
+
+**Rationale:** It is important to identify missing values early on in the analysis for several reasons:
+
+1.  **Data quality:** Missing values can indicate data quality issues. 33
+2.  **Statistical Analysis:** Missing values can affect the results of statistical analyses.
+3.  **Data Visualization:** Missing values can impact data visualizations.
+4.  **Decision-Making:** Missing values can affect decision-making processes and data integrity.
+
+```{r}
+
+#calculate missing value counts per variable
+missing_counts <- building_subset %>%
+  summarize(across(everything(), ~ sum(is.na(.))))
+
+#convert to a tidy format for plotting
+missing_counts_long <- missing_counts %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Missing_Count")
+
+
+#the variable "building_contractor" has high number of missing values (8070)
+#If we produce the plot with the "building_contractor", it will produce a highly skewed visualization
+#therefore, we will filter the missing data to include variables with number of missing values <1000 and >1000 and produce two separate plots
+
+filtered_missing <- missing_counts_long %>%
+  filter(Missing_Count<1000)
+
+filtered_missing2 <- missing_counts_long %>%
+  filter(Missing_Count>1000)
+
+#create a bar plot with missing values <1000
+missing_plot1 <- ggplot(filtered_missing, aes(x = reorder(Variable, -Missing_Count), y = Missing_Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Missing Value Counts <1000 per Variable",
+       x = "Variable",
+       y = "Missing Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#create a bar plot with missing values >1000
+missing_plot2 <- ggplot(filtered_missing2, aes(x = reorder(Variable, -Missing_Count), y = Missing_Count)) +
+  geom_bar(stat = "identity", fill = "red") +
+  labs(title = "Missing Value Counts >1000 per Variable",
+       x = "Variable",
+       y = "Missing Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Display the plot
+print(missing_plot1)
+print(missing_plot2)
+
+
+```
+
+## [**Step 3: Create a New Variable**]{style="color:purple;"}
+
+-   Now, I would like to create a new variable according to the values of the project_value.
+
+-   **Rationale:** The project_value cover a wide range, spanning from zero to hundreds of millions. To gain a clearer insight into these values and their distribution, I propose categorizing this variable. Given that I intend to use this variable as an independent factor in my analysis, it's important that the variable is understandable and interpretable.
+
+```{r}
+### Explore the variable project_value ###
+
+#select and sort the variable project_value
+proj.val_organized <- building_subset %>% 
+  filter(!is.na(project_value)) %>% #remove rows with NA in project_value
+  select(permit_number, project_value)%>% #select project_value
+  arrange(project_value) #sort project_value
+
+
+#examine the min, max, and mean values of the project_value
+min_max_mean <- proj.val_organized %>%
+  summarise(min=min(project_value), max=max(project_value), mean=mean(project_value))
+print(min_max_mean)
+
+#identify the unique values in the project_value
+unique_values <- proj.val_organized %>%
+  distinct(project_value)
+print(unique_values)
+
+
+#categorize the variable project_value
+proj.val_categorized <- proj.val_organized %>%
+  mutate(value= case_when (
+         project_value <10 ~ "Ones",
+         project_value >=10 & project_value <100 ~ "Tens", 
+         project_value >=100 & project_value <1000 ~ "Hundreds",
+         project_value >=1000 & project_value <10000 ~ "Thousands",
+         project_value >=10000 & project_value <100000 ~ "Ten Thousands",
+         project_value >=100000 & project_value <1000000 ~ "Hundred Thousands",
+         project_value >=1000000 & project_value <10000000 ~ "Millions", 
+         project_value >=10000000 & project_value <100000000 ~ "Ten Millions",
+         project_value >=100000000 & project_value <1000000000 ~ "Hundred Millions")
+        )
+
+
+#examine the frequency of project_value categories
+freq_proj.val_cat <- proj.val_categorized %>%
+  count(value)
+print(freq_proj.val_cat)
+
+
+```
+
+## [**Step 4: Explore Two Variables' Relationship**]{style="color:purple;"}
+
+-   In this step, I would like to explore the relationship between the type of work and different categories of project_value. I will also explore the relationship between mean project_value and different work types.
+-   **Rationale:** I want to understand what types of work are associated with higher or lower project values.
+-   For instance, by examining the generated bar chart, we can deduce that within groups A (Addition/Alteration) and B (Demolition/Destruction), project values falling into the "Ten Thousands" and "Hundred Thousands" categories were more prevalent. Conversely, in category E (Salvage and Abatement), project values categorized as "Ones" were more common. We further observed that category C (new buildings) had the highest mean project value, and category E had the lowest mean project value.
+
+```{r}
+
+#first, merge the dataset that contains the project value categories
+
+proj.val_categorized2 <- proj.val_categorized %>%
+  select(-project_value)
+
+prepared_building_data <- inner_join(building_subset, proj.val_categorized2, by = "permit_number")
+
+#rename the values in the type_of_work column
+prepared_building_data2 <- prepared_building_data %>%
+  mutate(type_of_work=recode(type_of_work,
+          "Addition / Alteration" = "A",
+          "Demolition / Deconstruction" = "B",
+          "New Building" = "C",
+          "Outdoor Uses (No Buildings Proposed)" = "D",
+          "Salvage and Abatement" = "E",
+          "Temporary Building / Structure" = "F"
+  ))
+                             
+# Create a cross-tabulation
+cross_tab <- table(prepared_building_data2$type_of_work, prepared_building_data2$value)
+
+# View the cross-tabulation
+print(cross_tab)
+
+                          
+#create a bar plot to visualize the relationship
+ggplot(prepared_building_data2, aes(x = type_of_work, fill = value)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Distribution of Project Values by Work Type", x = "Work Type", y = "Project Value")
+
+#Calculate the mean of project_value by work type
+
+mean_projval_worktype <- prepared_building_data2%>%
+  group_by(type_of_work) %>%
+  summarise(mean=mean(project_value))
+print(mean_projval_worktype)
+
+
+
+#plot the mean project_value by type_of_work
+ggplot(mean_projval_worktype, aes(x = type_of_work, y = mean)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  labs(title = "Mean Project Value by Work Type", x = "Work Type", y = "Mean Project Value")
+
+```
+
+<!----------------------------------------------------------------------------->
+
+# **Task 3:** Choose Research Questions
+
+**(4 points)** So far, you have chosen a dataset and gotten familiar with it through exploring the data. You have also brainstormed one research question that interested you (Task 1.4). Now it's time to pick 4 research questions that you would like to explore in Milestone 2! Write the 4 questions and any additional comments below.
+
+<!--- *****START HERE***** --->
+
+1.  What is the relationship between *project_value* and *"year"*?
+
+2.  What is the relationship between *"project_value"* and *"property_use"*?
+
+3.  What is the relationship between *"year"* and *"property"*?
+
+4.  What factors are associated with higher mean project values.
+
+    <!----------------------------->
+
+# Overall reproducibility/Cleanliness/Coherence Checklist
+
+## Coherence (0.5 points)
+
+The document should read sensibly from top to bottom, with no major continuity errors. An example of a major continuity error is having a data set listed for Task 3 that is not part of one of the data sets listed in Task 1.
+
+## Error-free code (3 points)
+
+For full marks, all code in the document should run without error. 1 point deduction if most code runs without error, and 2 points deduction if more than 50% of the code throws an error.
+
+## Main README (1 point)
+
+There should be a file named `README.md` at the top level of your repository. Its contents should automatically appear when you visit the repository on GitHub.
+
+Minimum contents of the README file:
+
+-   In a sentence or two, explains what this repository is, so that future-you or someone else stumbling on your repository can be oriented to the repository.
+-   In a sentence or two (or more??), briefly explains how to engage with the repository. You can assume the person reading knows the material from STAT 545A. Basically, if a visitor to your repository wants to explore your project, what should they know?
+
+Once you get in the habit of making README files, and seeing more README files in other projects, you'll wonder how you ever got by without them! They are tremendously helpful.
+
+## Output (1 point)
+
+All output is readable, recent and relevant:
+
+-   All Rmd files have been `knit`ted to their output md files.
+-   All knitted md files are viewable without errors on Github. Examples of errors: Missing plots, "Sorry about that, but we can't show files that are this big right now" messages, error messages from broken R code
+-   All of these output files are up-to-date -- that is, they haven't fallen behind after the source (Rmd) files have been updated.
+-   There should be no relic output files. For example, if you were knitting an Rmd to html, but then changed the output to be only a markdown file, then the html file is a relic and should be deleted.
+
+(0.5 point deduction if any of the above criteria are not met. 1 point deduction if most or all of the above criteria are not met.)
+
+Our recommendation: right before submission, delete all output files, and re-knit each milestone's Rmd file, so that everything is up to date and relevant. Then, after your final commit and push to Github, CHECK on Github to make sure that everything looks the way you intended!
+
+## Tagged release (0.5 points)
+
+You've tagged a release for Milestone 1.
+
+### Attribution
+
+Thanks to Icíar Fernández Boyano for mostly putting this together, and Vincenzo Coia for launching.
