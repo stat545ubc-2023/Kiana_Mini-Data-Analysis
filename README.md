@@ -30,15 +30,16 @@ This is a Mini Data Analysis Project with two milestones. The learning objective
 ### **Milestone 1 Files**
 
 -   **README.md:** This file provides an overview of the project description and objectives
--   **MDA_Deliverable1.Rmd:** This is the R markdown document for M1 that includes detailed codes and instructions.
+-   **MDA_Deliverable1.Rmd:** This is the R markdown document for M1 that includes detailed codes and instructions
 -   **MDA_Deliverable1.md:** This is the .md output (knitted markdown)
 
 # Collaboration
 
--   To access this project online, just click on the Markdown file. If you wish to obtain a copy of the project, select "Download ZIP" and then open the files using R/RStudio.
+-   To access this project online, just click on the Markdown file
+-    If you wish to obtain a copy of the project, select "Download ZIP" and then open the files using R/RStudio
 
 **For collaboration or cloning purposes:**
 
 -   Click the "\< \> Code" button in the upper right-hand corner.
 
--   In R/RStudio, initiate a new project through "Version Control" -\> "Git" (clone a project from a Git repository) -\> Paste the repository URL and save your local copy to a designated folder on your computer.
+-   In R/RStudio, initiate a new project through "Version Control" -\> "Git" (clone a project from a Git repository) -\> Paste the repository URL and save your local copy to a designated folder on your computer
