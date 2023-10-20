@@ -1,0 +1,1240 @@
+---
+title: "Mini Data Analysis Deliverable 2"
+date: "2023-10-19"
+author: |
+ Kiana Yazdani
+output:
+  github_document:
+    toc: true
+---
+
+*To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
+
+# MDA Deliverable 2 
+
+## Introduction
+
+In Milestone 1, you explored your data. and came up with research questions. This time, we will finish up our mini data analysis and obtain results for your data by:
+
+-   Making summary tables and graphs
+-   Manipulating special data types in R: factors and/or dates and times.
+-   Fitting a model object to your data, and extract a result.
+-   Reading and writing data as separate files.
+
+We will also explore more in depth the concept of *tidy data.*
+
+**NOTE**: The main purpose of the mini data analysis is to integrate what you learn in class in an analysis. Although each milestone provides a framework for you to conduct your analysis, it's possible that you might find the instructions too rigid for your data set. If this is the case, you may deviate from the instructions -- just make sure you're demonstrating a wide range of tools and techniques taught in this class.
+
+## Instructions
+
+**To complete this milestone**, edit [this very `.Rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are tagged with `<!--- start your work here--->`.
+
+**To submit this milestone**, make sure to knit this `.Rmd` file to an `.md` file by changing the YAML output settings from `output: html_document` to `output: github_document`. Commit and push all of your work to your mini-analysis GitHub repository, and tag a release on GitHub. Then, submit a link to your tagged release on canvas.
+
+**Points**: This milestone is worth 50 points: 45 for your analysis, and 5 for overall reproducibility, cleanliness, and coherence of the Github submission.
+
+**Research Questions**: In Milestone 1, you chose two research questions to focus on. Wherever realistic, your work in this milestone should relate to these research questions whenever we ask for justification behind your work. In the case that some tasks in this milestone don't align well with one of your research questions, feel free to discuss your results in the context of a different research question.
+
+## Learning Objectives
+
+By the end of this milestone, you should:
+
+-   Understand what *tidy* data is, and how to create it using `tidyr`.
+-   Generate a reproducible and clear report using R Markdown.
+-   Manipulating special data types in R: factors and/or dates and times.
+-   Fitting a model object to your data, and extract a result.
+-   Reading and writing data as separate files.
+
+# Setup: Install Libraries and Load Packages
+
+For this analysis, I imported several libraries listed below. 
+
+**PLEASE, NOTE:** When attempting to knit the ".Rmd" file, I encountered an error indicating that the "prepared_building_data2" dataset, which I had generated in a prior milestone 1, could not be located. Consequently, I needed to save this dataset as an RDS file in "MDA_Deliverable 1" folder to ensure that I could access it in this analysis.
+
+
+```{r}
+### Load necessary libraries
+
+library(datateachr)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(stringr)
+library(here)
+
+# Load prepared_building_data2 from an RDS file
+
+prepared_building_data2 <- readRDS("C:/Users/kia_y/SynologyDrive/PhD Library/PhD Courses/STAT545A/Mini Data Analysis/Kiana_Mini-Data-Analysis/MDA_Deliverable1/my_dataset.rds")
+
+
+```
+
+# Task 1: Process and Summarize Your Data
+
+From milestone 1, you should have an idea of the basic structure of your dataset (e.g. number of rows and columns, class types, etc.). Here, we will start investigating your data more in-depth using various data manipulation functions.
+
+## 1.1. Rewrite the four research questions specified in MDA_M1 (1 point)
+
+First, write out the 4 research questions you defined in milestone 1. This will guide your work through milestone 2:
+
+<!-------------------------- Start your work below ---------------------------->
+
+1.  What is the relationship between **"*project_value"*** and ***"year"***?
+
+-   **Q1. Description**: In question 1, I am interested in investigating the relationship between "project_value" and "year" to identify trends and patterns. Are project values increasing or decreasing over time? Are there specific years that exhibit significant deviations in project values?
+
+2.  What is the relationship between ***"project_value"*** and ***"property_use"***?
+
+-   **Q2. Description**: I aim to assess whether there is a discernible relationship or association between "project value" and "property usage categories". Specifically, we want to determine if certain types of property usage tend to have higher or lower mean project value.
+
+3.  What is the relationship between ***"year"*** and ***"property_use"***?
+
+-   **Q3.Description**: This question aims to understand how the distribution of property usage categories varies across different years.
+
+4.  What factors are associated with higher mean project values?
+
+-   **Q4. Description**: Eventually, after proper data exploration, I am interested in identifying and understanding factors that contribute to higher or lower mean project value.
+-   <!----------------------------------------------------------------------------->
+
+Here, we will investigate your data using various data manipulation and graphing functions.
+
+## 1.2. Data Manipulation (Summarizing & Graphing) (8 points)
+
+Now, for each of your four research questions, choose one task from options 1-4 (summarizing), and one other task from 4-8 (graphing). You should have 2 tasks done for each research question (8 total). Make sure it makes sense to do them! (e.g. don't use numerical variables for a task that needs a categorical variable.). Comment on why each task helps (or doesn't!) answer the corresponding research question.
+
+Ensure that the output of each operation is printed!
+
+Also, make sure that you're using dplyr and ggplot2 rather than base R. Outside of this project, you may find that you prefer using base R functions for certain tasks, and that's just fine! But part of this project is for you to practice the tools we learned in class, which are dplyr and ggplot2.
+
+**Summarizing:**
+
+1.  Compute the *range*, *mean*, and *two other summary statistics* of **one numerical variable** across the groups of **one categorical variable** from your data.
+2.  Compute the number of observations for at least one of your categorical variables. Do not use the function `table()`!
+3.  Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: is age in years into "child, teen, adult, senior".*
+4.  Compute the proportion and counts in each category of one categorical variable across the groups of another categorical variable from your data. Do not use the function `table()`!
+
+**Graphing:**
+
+6.  Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read.
+7.  Make a graph where it makes sense to customize the alpha transparency.Using variables and/or tables you made in one of the "Summarizing" tasks:
+8.  Create a graph that has at least two geom layers.
+9.  Create 3 histograms, with each histogram having different-sized bins. Pick the "best" one and explain why it is the best.
+
+Make sure it's clear what research question you are doing each operation for!
+
+<!------------------------- Start your work below ----------------------------->
+
+
+### Summarizing
+
+#### Compute the *range*, *mean*, and *two other summary statistics* of **one numerical variable** across the groups of **one categorical variable** from your data.
+
+**Assessed Question:** What is the relationship between [mean]*"project_value"* and *"property_use"*?
+
+-   **Description Reminder**: I aim to assess whether there is a discernible relationship or association between "project_value" and "property usage categories". Specifically, I want to determine if certain types of property usage tend to have higher or lower mean project value.
+
+**Review & Description of Steps:**
+
+-   In the previous analysis, conducted in MDA_M1, I thoroughly explored the 'project_value' variable. I did examine the summary statistics for this specific variable. Moreover, while the original form of this variable is numeric, I transformed it into a categorical variable based on its values and labeled this new categorical variable, ' value.'
+
+-   Here, I will first explore the categorical variable "property_use" to gain a better understanding of its data.
+
+-   I will then calculate the summary statistics for mean "project_value" across the categories of "property_use".
+
+**After Evaluating the Variable "property_use"**:
+
+-   I observed 99 observations.
+
+-   The categories "Dwelling Use" were the most frequent, with a count of 14,050, followed by "Office Use" with 2,857, and "Retail Uses" with 1,133 observations, making them the most commonly occurring categories.
+
+-   To better use this variable, I will need to transform it with fewer and more interpretable categories.
+
+-   Carefully, browsing the observations, I found out that overall there are **13 types of "property_use"**: Cultural/Recreational; Dwelling; Institutional; Live-work; Manufacturing; Office; Parking; Retail; Service; Transportation; Utilities; Wholesale; and a few others.
+
+-   I will use the ***stringer*** library to extract character values from the variable "property_use" and create a new categorical variable that indicates property usage in a cleaner way. I will call this variable "prop_use2".
+
+**Summary of Findings After Data Exploration:**
+
+-   Live_Work Use: This category had the highest mean project value of approximately 6,895,107.14, with a range from 3,000 to 96,000,000.
+
+```{r}
+# View the dataset that I prepared for analysis based on MDA_Deliverable1: 
+view(prepared_building_data2)
+
+# Assess the frequency of the variable "property_use"
+freq_propuse<- prepared_building_data2 %>%
+  filter(!is.na(property_use)) %>% #remove missing values 
+  count(property_use) %>% #calculate the frequency
+  arrange(desc(n)) #arrange the count numbers in descending order
+
+# Print the frequency of the categories in "property_use" 
+print(freq_propuse)
+
+
+
+### Create a new categorical variable according to the values of "property_use" and call it "prop_use2" ###
+### The new variable "prop_use2" will have 13 types of property use as explained ### 
+
+prepared_building_data2 <- prepared_building_data2 %>%
+  filter(!is.na(property_use)) %>% 
+  mutate(prop_use2 = case_when
+         (
+          str_detect(property_use, "^Cultural") ~ "Cultral/Creational Use",
+          str_detect(property_use, "^Dwelling") ~ "Dwelling Use", 
+          str_detect(property_use, "^Institutional") ~ "Institutional Use", 
+          str_detect(property_use, "^Live") ~ "Live_Work Use", 
+          str_detect(property_use, "^Manufacturing") ~ "Manufacturing Use", 
+          str_detect(property_use, "^Office") ~ "Office Use", 
+          str_detect(property_use, "^Parking") ~ "Parking Use", 
+          str_detect(property_use, "^Retail") ~ "Retail Use",
+          str_detect(property_use, "^Service") ~ "Service Use", 
+          str_detect(property_use, "^Transportation") ~ "Transport Use", 
+          str_detect(property_use, "^Utility") ~ "Utility", 
+          str_detect(property_use, "^Wholesale") ~ "Wholesale",
+          TRUE ~ "Other" ))
+
+# Assess frequency of prop-use2 categories
+freq_propuse2 <- prepared_building_data2 %>%
+  count(prop_use2) %>%
+  arrange(desc(n))
+
+# Print the categories of the "prop_use2"
+print(freq_propuse2)
+
+# Examine the summary statistics for "project_value" across "prop_use2" categories
+projval_by_propuse <- prepared_building_data2 %>%
+  group_by(prop_use2) %>%
+  summarize(
+    mean = mean(project_value, na.rm = TRUE), #mean, remove na values
+    min = min(project_value, na.rm=TRUE), #min, remove na values
+    max = max(project_value, na.rm=TRUE), #max, remove na values
+    range = max(project_value, na.rm=TRUE)-min(project_value, na.rm=TRUE), #range, remove na values
+    sd = sd(project_value, na.rm=TRUE)) %>% #sd, remove na values
+  arrange(desc(mean)) #arrange mean across prop_use2 categories in desc order
+
+# print the output
+print(projval_by_propuse)
+
+### Note: The live-work property use had the highest mean project value (mean=6,895,107.14)
+```
+
+#### Compute the number of observations for at least one of your categorical variables. Do not use the function `table()`!
+
+**Assessed Question:** What factors are associated with higher or lower mean project value?
+
+-   **Description Reminder**: Eventually, after proper data exploration, I am interested in identifying and understanding factors that contribute to higher or lower mean "project values."
+
+* To answer this question properly, I need to carefully explore all the usable and potentially relevant variables in the data. The dataset I have chosen has several categorical values. For instance, in the above exercise, I explored the categorical variable "property_use".
+
+* In MDA_M1, I also assessed frequency of the variable "value", which is the categorical representation of "project_value".  
+
+
+**Review & Description of Steps:**
+
+-   In this exercise, I will explore all the following categorical variables that may be relevant to answer the above mentioned research question: 
+
+* Type_of_work
+* Specific_use_category
+* Building_Contractor
+
+**Summary of Findings After Data Exploration:**
+
+* Upon examining the three variables mentioned above, I did discover that "specific_use_category" and "building_contractor" are intriguing. However, they present a challenge due to the considerable number of observations they encompass. Without access to a data dictionary, comprehending the various levels within these two variables becomes quite challenging.
+
+* The "type of work" variable consists of six distinct categories, with category A (i.e., addition/alteration) being the most frequently occurring one. 
+
+```{r}
+
+### Compute the number of observations for the following categorical variables
+
+# Variable "type_of_work"
+freq_typework <- prepared_building_data2 %>%
+  filter(!is.na(type_of_work)) %>%
+  count(type_of_work) %>%
+  arrange(desc(n))
+
+# Print categories of the variable "value"
+print(freq_typework)
+
+
+# Variable "specific_use_category"
+freq_specuse<- prepared_building_data2 %>%
+  filter(!is.na(specific_use_category)) %>%
+  count(specific_use_category) %>%
+  arrange(desc(n))
+
+# Print categories of the variable "specific_use_category"
+print(freq_specuse)
+
+
+# Variable "building_contractor"
+freq_contractor<- prepared_building_data2 %>%
+  filter(!is.na(building_contractor)) %>%
+  count(building_contractor) %>%
+  arrange(desc(n))
+
+# Print categories of the variable "building_contractor"
+print(freq_contractor)
+
+
+```
+
+#### Create a categorical variable with 3 or more groups from an existing numerical variable. You can use this new variable in the other tasks! *An example: age in years into "child, teen, adult, senior".*
+
+**Assessed Question:** What is the relationship between **"*project_value"*** and ***"year"***?
+
+**Description**: In question, I am interested in investigating the relationship between "project_value" and "year" to identify trends and patterns. Are project values increasing or decreasing over time? Are there specific years that exhibit significant deviations in project values?
+
+
+**Review & Description of Steps:**
+
+* Please, note that in MDA_M1, I had previously transformed the "project_value," which serves as the dependent variable in the analysis. This variable is originally numeric in the dataset but was converted into a categorical format (i.e., variable "value"). I have commented the code out as a reminder. 
+
+* For this exercise, I will create a categorical variable from "year", which is another numerical variable in the dataset. 
+
+* I will then similar to exercise 1, calculate the summary statistics for mean "project_value" across different categories of "year".
+
+
+**Summary of Findings After Data Exploration:**
+
+
+The counts (n) for each year category are as follows:
+
+-   Category B (year=2018) has 6,743 observations.
+-   Category A (year=2017) has 6,698 observations.
+-   Category C (year=2019) has 5,567 observations.
+-   Category D (year=2020) has 1,615 observations.
+
+
+    **Comment on the year-cat variable:** This dataset includes a relatively short time span, only four years from 2017 to 2020. While this timeframe could be viewed as a constraint in the analysis, it might align with the primary purpose of collecting the data. I lack knowledge about the main rationale behind gathering this data, and it's plausible that its significance is concentrated within the 2017-2020 period. Interestingly, we observed a decline in the frequency of observations between 2017-2020. 
+
+* After calculating the summary statistics across 2017-2020, we observed that the year 2018 has the highest mean project value at 739,341.3, and it also has the widest range and highest standard deviation, indicating greater variability. 
+
+* In contrast, the year 2017 has the lowest mean project value at 451,799.9, and it has the lowest variability with a smaller range and standard deviation. Additionally, there was a decline in the mean project value from 2018-2020.
+
+    **Comment: It is interesting that although the number of observations in the years 2017 and 2018 are relatively close, there is a noticeable increase in mean project value from 2017 to 2018, and then it starts to decline in the following years.
+
+
+```{r}
+
+### MDA1_Reminder
+
+#categorize the variable project_value
+#proj.val_categorized <- proj.val_organized %>%
+  #mutate(value= case_when (
+         #project_value <10 ~ "Ones",
+         #project_value >=10 & project_value <100 ~ "Tens", 
+         #project_value >=100 & project_value <1000 ~ "Hundreds",
+         #project_value >=1000 & project_value <10000 ~ "Thousands",
+         #project_value >=10000 & project_value <100000 ~ "Ten Thousands",
+         #project_value >=100000 & project_value <1000000 ~ "Hundred Thousands",
+         #project_value >=1000000 & project_value <10000000 ~ "Millions", 
+         #project_value >=10000000 & project_value <100000000 ~ "Ten Millions",
+         #project_value >=100000000 & project_value <1000000000 ~ "Hundred Millions"))
+
+
+#examine the frequency of project_value categories
+#freq_proj.val_cat <- proj.val_categorized %>%
+  #count(value)
+#print(freq_proj.val_cat)
+
+
+
+### Create a new categorical variable from the numerical "variable" year and name the variable "year_cat"
+prepared_building_data2 <- prepared_building_data2 %>%
+  filter(!is.na(year)) %>%
+  mutate(year_cat = case_when(
+         year ==2017 ~ "A",
+         year ==2018 ~ "B", 
+         year == 2019 ~ "C",
+         year == 2020 ~ "D",
+         ))
+
+# Examine the categories of the variable "year_cat"
+year_cat_count <- prepared_building_data2 %>%
+  count(year_cat) %>%
+  arrange(desc(n))
+
+# Print the categories of the variable "year_cat"
+print(year_cat_count)
+### Note: Category C (year=2018) had the highest of frequencies.
+
+
+### Calculate the summary statistics for "project_value" across "year" categories
+projval_by_year <- prepared_building_data2 %>%
+  group_by(year_cat) %>% #group the data by year_cat
+  summarize(
+    mean = mean(project_value, na.rm = TRUE), # calculate mean and remove "na" values
+    min = min(project_value, na.rm=TRUE), #min and remove "na" values
+    max = max(project_value, na.rm=TRUE), #max and remove "na" values
+    range = max(project_value, na.rm=TRUE)-min(project_value, na.rm=TRUE), #calculate range and remove "na" values
+    sd = sd(project_value, na.rm=TRUE)) %>% #
+  arrange(desc(mean))  #arrange the results in descending order of the mean value
+
+# print the mean project values by categories of year
+print(projval_by_year)
+
+#### NOTE: I have used the data stored in the variable "projval_by_year" to address the question related to Task 4.1: Take a summary table that you made from Task 1, and write it as a csv file in your `output` folder. 
+
+```
+
+#### Compute the proportion and counts in each category of one categorical variable across the groups of another categorical variable from your data. Do not use the function `table()`!
+
+**Assessed Question:** What is the relationship between *"year_cat"* and *"property_use"*?
+
+**Description Reminder**: This question aims to understand how the distribution of "property usage categories" varies across different "years".
+
+**Review & Description of Steps:**
+
+* I will first produce a cross-tabulation between "year_cat" and "property_use2", the transformed version of the variable property_use2, that is easier to work with. 
+
+* I will also assess the following question for this exercise: What is the relationship between *"project_value"* and *"year_cat"*? However, instead of looking at mean "project_value", I will look at the categorical representation of this variable, "value".  
+
+**Summary of Findings After Data Exploration:**
+
+* The category "Dwelling Use" exhibited the highest count across all the year categories.
+
+```{r}
+
+### Cross tabulation between variables "prop_use2" and "year_cat"
+prepared_building_data2 %>%
+  group_by(prop_use2, year_cat) %>%
+  summarize( 
+    count=n(),
+    proportions = n()/ nrow(prepared_building_data2)
+) %>%
+  arrange(desc(count))
+
+
+
+#### cross tabulation between variables "value" and "year_cat"
+prepared_building_data2 %>%
+  group_by(value, year_cat) %>%
+  summarize( 
+    count=n(),
+    proportions = n()/ nrow(prepared_building_data2)
+) %>%
+  arrange(desc(count))
+
+```
+
+### Graphing
+
+#### Create a graph of your choosing, make one of the axes logarithmic, and format the axes labels so that they are "pretty" or easier to read
+
+**Assessed Question:** What is the relationship between *"project_value"* and *"year"*?
+
+**Review & Description of Steps:**
+
+* The project_value includes values of 0. If I transform its value by applying the log, the log transformation will produce infinite values. Therefore, for the purpose of producing this plot I will remove the 0 values from this variable. 
+
+* Due to the extensive range of numeric values within the "project_value" variable, I will create two separate plots. One plot will focus on values equal to or exceeding 100,000, while the other will address values falling within the range of 10 to 100,000. 
+
+* I also had to exclude project_Values =<10 (mainly with values =1) to prevent producing infinite values by log transformation. There is only one project_value with value=10. 
+
+
+
+```{r}
+
+# Data with "project_value" >=100000
+data_temp <- prepared_building_data2 %>%
+  filter(!is.na(project_value) & project_value >=100000) %>%
+  select(project_value, year_cat)
+
+# Plot the data with log "project_value" >=100000
+plot1 <- ggplot(data=data_temp, aes(x=year_cat, y=log(project_value))) +
+  geom_point() +
+  scale_y_continuous(trans = "log10") + #apply log transformation to the y-axis
+  labs(x= "Year Categories", y="Log Project Value")+
+  theme_minimal()
+  
+
+
+# Data with "project_value" >10 and <100000
+data_temp2 <- prepared_building_data2 %>%
+  filter(!is.na(project_value) & project_value >10 & project_value <100000) %>%
+  select(project_value, year_cat)
+
+# Plot the data with log "project_value" >10 and <100000
+plot2 <- ggplot(data=data_temp2, aes(x=year_cat, y=log(project_value))) +
+  geom_point() +
+  scale_y_continuous(trans = "log10") + #apply log transformation to the y-axis
+  labs(x= "Year Categories", y="Log Project Value")+
+  theme_minimal()
+
+# Print the plots output
+print(plot1)
+print(plot2)
+
+```
+
+#### Make a graph where it makes sense to customize the alpha transparency
+
+**Assessed Question:** What is the relationship between *"project_value"* and *"property_use"*?
+
+**Review & Description of Steps:**
+
+* Similar to the previous exercise, The project_value includes values of 0. If I transform its value by applying the log, the log transformation will produce infinite values. Therefore, for the purpose of producing this plot I will remove the 0 values from this variable. 
+
+* I also had to exclude project_Values =<10 (mainly with values =1) to prevent producing infinite values by log transformation. There is only one project_value with value=10. 
+
+* In this context, as the variable "property_use" encompasses 13 distinct categories, I will generate three separate, more focused data frames. This step is essential to prevent overcrowding on the x-axis when generating plots for property use.
+
+```{r}
+
+# Data with "project_value" >=10 and "property_use" in "Cultural/Creational Use", "Dwelling Use", "Institutional Use","Live_Work Use"
+data_temp3 <- prepared_building_data2 %>%
+  filter(!is.na(project_value) & project_value >=10 & prop_use2 %in% c("Cultral/Creational Use", "Dwelling Use", "Institutional Use","Live_Work Use" )
+  ) %>% 
+  select(project_value, prop_use2)
+
+
+# Plot data_temp3
+plot_alpha <- ggplot(data = data_temp3 , aes(x = prop_use2, y = log(project_value))) +
+  geom_point(color = "blue", size = 3, alpha = 0.5) +  # Set color, size, and alpha transparency
+  scale_y_continuous(trans = "log10") +  # Apply log transformation to the y-axis
+  labs(x = "Propery Use", y = "Log Project Value") +  # Customize axis labels
+  theme_minimal()
+
+
+# Data with "project_value" >=10 and "property_use" in "Manufacturing Use", "Office Use", "Parking Use","Retail Use"
+data_temp4 <- prepared_building_data2 %>%
+  filter(!is.na(project_value) & project_value >=10 & prop_use2 %in% c("Manufacturing Use", "Office Use", "Parking Use","Retail Use")
+  ) %>% 
+  select(project_value, prop_use2)
+
+# Plot data_temp4
+plot_alpha2 <- ggplot(data = data_temp4 , aes(x = prop_use2, y = log(project_value))) +
+  geom_point(color = "red", size = 3, alpha = 0.5) +  # Set color, size, and alpha transparency
+  scale_y_continuous(trans = "log10") +  # Apply log transformation to the y-axis
+  labs(x = "Propery Use", y = "Log Project Value") +  # Customize axis labels
+  theme_minimal()
+
+
+# Data with "project_value" >=10 and "property_use" in "Service Use", "Transport Use", "Utility","Wholesale", "Other"
+data_temp5 <- prepared_building_data2 %>%
+  filter(!is.na(project_value) & project_value >=10 & prop_use2 %in% c("Service Use", "Transport Use", "Utility","Wholesale", "Other")
+  ) %>% 
+  select(project_value, prop_use2)
+
+# Plot data_temp5
+plot_alpha3 <- ggplot(data = data_temp5 , aes(x = prop_use2, y = log(project_value))) +
+  geom_point(color = "darkgreen", size = 3, alpha = 0.5) +  # Set color, size, and alpha transparency
+  scale_y_continuous(trans = "log10") +  # Apply log transformation to the y-axis
+  labs(x = "Propery Use", y = "Log Project Value") +  # Customize axis labels
+  theme_minimal()
+
+# Print the plots output
+print(plot_alpha)
+print(plot_alpha2)
+print(plot_alpha3)
+
+```
+
+#### Create a graph that has at least two geom layers
+
+**Assessed Question:** What is the relationship between *"year"* and *"property_use"*?
+
+**Review & Description of Steps:**
+
+* To properly conduct this exercise, I will need to extend the research question to look at the interplay between the three following variables: "year", "property_use" and "project_value". 
+
+* Similar to the previous exercise, since the variable "property_use" encompasses 13 categories, I will generate three separate, more focused data frames  to prevent overcrowding on the x-axis when generating plots. 
+
+* Similar to previous exercises, I will continue working with the log(project_value) as it produces a cleaner plot, and will include project_value >=10 to prevent producing infinite values. 
+
+**Interesting Finding**
+
+* I had an interesting observation: despite "Live_work" use having the highest mean "project_value" in previous exercises, our plot showed no log project value for this category in 2017. However, in 2019, it had the highest log project value.
+
+```{r}
+
+# Data with "project_value" >=10 and "property_use" in "Cultural/Creational Use", "Dwelling Use", "Institutional Use","Live_Work Use"
+data_temp6 <- prepared_building_data2 %>%
+  filter(
+    !is.na(project_value),
+    !is.na(prop_use2),
+    !is.na(year_cat),
+    project_value >= 10,
+    prop_use2 %in% c("Cultral/Creational Use", "Dwelling Use", "Institutional Use","Live_Work Use" )
+  ) %>%
+  select(project_value, prop_use2, year_cat)
+
+# Plot the data_temp6
+plot_geomlayer <- ggplot(data_temp6, aes(x = year_cat, y = log(project_value), fill = prop_use2)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Year Category", y = "Log Project Value") +
+  scale_y_continuous(trans = "log10") +
+  scale_fill_manual(values = c("Cultral/Creational Use" = "green", "Dwelling Use" = "red", "Institutional Use" = "yellow", "Live_Work Use" = "blue")) +
+  theme_minimal()
+
+# Data with "project_value" >=10 and "property_use" in "Manufacturing Use", "Office Use", "Parking Use","Retail Use"
+data_temp7 <- prepared_building_data2 %>%
+  filter(
+    !is.na(project_value),
+    !is.na(prop_use2),
+    !is.na(year_cat),
+    project_value >= 10,
+    prop_use2 %in% c("Manufacturing Use", "Office Use","Parking Use", "Retail Use")
+  ) %>%
+  select(project_value, prop_use2, year_cat)
+
+# Plot the data_temp7
+plot_geomlayer2 <- ggplot(data_temp7, aes(x = year_cat, y = log(project_value), fill = prop_use2)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Year Category", y = "Log Project Value") +
+  scale_y_continuous(trans = "log10") +
+  scale_fill_manual(values = c("Manufacturing Use" = "darkgreen", "Office Use" = "purple", "Parking Use" = "yellow", "Retail Use" = "orange")) +
+  theme_minimal()
+
+
+
+# Data with "project_value" >=10 and "property_use" in "Service Use", "Transport Use", "Utility","Wholesale", "Other"
+data_temp8 <- prepared_building_data2 %>%
+  filter(
+    !is.na(project_value),
+    !is.na(prop_use2),
+    !is.na(year_cat),
+    project_value >= 10,
+    prop_use2 %in% c("Service Use", "Transport Use","Utility", "Wholesale", "Other")
+  ) %>%
+  select(project_value, prop_use2, year_cat)
+
+# Plot the data_temp8
+plot_geomlayer3 <- ggplot(data_temp8, aes(x = year_cat, y = log(project_value), fill = prop_use2)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(x = "Year Category", y = "Log Project Value") +
+  scale_y_continuous(trans = "log10") +
+  scale_fill_manual(values = c("Service Use" = "violet", "Transport Use" = "salmon", "Wholesale" = "wheat", "Other" = "maroon", "Utility" = "sienna")) +
+  theme_minimal()
+
+
+
+# Print the plots output
+print(plot_geomlayer)
+print(plot_geomlayer2)
+print(plot_geomlayer3)
+
+```
+
+#### Create 3 histograms, with each histogram having different sized bins. Pick the "best" one and explain why it is the best
+
+**Assessed Question:** What factors are associated with higher or lower mean project value?
+
+* To answer this question properly, I need to carefully explore all the usable and potentially relevant variables in the data. 
+
+* Histograms are used for visualizing the distribution of a single numeric variable. 
+
+* The dataset I have prepared has three numeric values: "project_value", "year", and "bi_id". 
+
+* I will produce three histograms for the above numeric variables to better understand their distribution. 
+
+* Creating a histogram for a variable with a wide range of values require some customization to ensure that the histogram provides meaningful insights.
+
+**Winning Histogram**
+
+* I choose histogram 3, the histogram that shows the distribution of "year" in the data.This histogram is particularly straightforward to interpret. It allows us to quickly discern that the year 2018 has the most significant distribution, whereas the year 2020 exhibits the lowest distribution. Furthermore, it is evident that there is a decrease in distribution from 2018 to 2020.We should regardless be mindful that having too few bins can oversimplify the data. 
+
+* Histogram 1(bi_id) has many bins that leads to overwhelming level of detail and it's challenging to visualize the data distribution due to its wide-ranging values. 
+
+* Histogram 2(project_value) is in log-scale and the x-axis is not easy to interpret. The number of bins are okay, however, the data interpretability still is slightly challenging. 
+
+```{r}
+
+### The variable bi_id has a minimum of 1 and a maximum of 20,680, and require some customization to ensure that the histogram provides meaningful insights. I am choosing the bandwidth of 500 for this reason to produce a meaningful graph. 
+
+# Histogram 1 for the bi_id variable
+hist1 <- ggplot(prepared_building_data2 , aes(x =bi_id)) +
+  geom_histogram(binwidth = 500, fill= "pink", color= "grey") +
+  labs(title = "Histogram for bi_id", x = "bi_id", y = "Frequency") +
+  theme_minimal()
+
+### The variable "project_value" has a min 0 and max 807,185,500 which also require some customization. I have used a log scale for the x-axis to better visualize the distribution of data across this wide range.
+
+# Filter data to prevent production of infinite values when applying the log scale
+data_temp9 <- prepared_building_data2 %>%
+  filter(project_value >= 10)
+  
+# Histogram 2 with a log scale on the x-axis
+hist2 <- ggplot(data_temp9, aes(x = project_value)) +
+  geom_histogram(binwidth = 0.2, fill = "turquoise", color = "black") + 
+  labs(title = "Histogram for project_value (log scale)", x = "project_value", y = "Frequency") +
+  scale_x_continuous(trans = "log10") +  # Apply log10 transformation to x-axis
+  theme_minimal()
+
+
+#Histogram 3 for the year variable
+hist3 <- ggplot(prepared_building_data2 , aes(x = year)) +
+  geom_histogram(binwidth = 1, fill= "gold", color= "violet") +
+  labs(title = "Histogram for year", x = "year", y = "Frequency") +
+  theme_minimal()
+
+# Print the histograms
+print(hist1)
+print(hist2)
+print(hist3)
+
+
+
+```
+
+<!----------------------------------------------------------------------------->
+
+
+
+## 1.3. Reconsider Your Research Questions (2 points)
+
+Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
+
+<!------------------------- Write your answer here ---------------------------->
+
+**Summary of Research Questions Evaluated in the MDA, both M1 and M2:**
+
+
+*  What is the relationship between **"*project_value"*** and ***"year"***?
+*  What is the relationship between ***"project_value"*** and ***"property_use"***?
+*  What is the relationship between ***"year"*** and ***"property_use"***?
+*  What is the relationship between **"project_value"** and **"type_of_work"**?  
+*  What factors are associated with higher or lower mean project value?
+
+
+**Interesting Findings:**
+
+* In MDA_M1, we observed that within groups A (Addition/Alteration) and B (Demolition/Destruction), project values falling into the "Ten Thousands" and "Hundred Thousands" categories were more prevalent. Conversely, in category E (Salvage and Abatement), project values categorized as "Ones" were more common. We further observed that category C (new buildings) had the highest mean project value, and category E had the lowest mean project value.
+
+* We observed that the year 2018 has the highest mean project value at 739,341.3, and it also has the widest range and highest standard deviation, indicating greater variability. In contrast, the year 2017 has the lowest mean project value at 451,799.9, and it has the lowest variability with a smaller range and standard deviation. Additionally, there was a decline in the mean project value from 2018-2020.
+
+* In terms of property use, we observed that  "Live_Work Use" category had the highest mean project value of approximately 6,895,107.14, with a range from 3,000 to 96,000,000. 
+
+* Interestingly, when we evaluated the interplay of "property_use" and "year", despite "Live_work" use having the highest mean "project_value", our plot showed no log project value for this category in 2017. However, in 2019, it had the highest log project value. We also found out the category "Dwelling Use" exhibited the highest count across all the year categories.
+
+**Limitations and What Remains Unclear**
+
+* My independent factor (Y) is "project_value." Upon a thorough examination of this factor, I've observed a significant variation in the data, ranging from zero to hundreds of millions. I'm interested in understanding the reasons behind this substantial data range. While there are certain variables that might provide partial explanations, I believe there are unaccounted factors or undisclosed variables in this dataset that are contributing to the broader variability, making it challenging to fully comprehend the underlying reasons for this wide data range.
+
+* This dataset includes a relatively short time span, only four years from 2017 to 2020. While this time frame could be viewed as a constraint in the analysis, it might align with the primary purpose of collecting the data. I lack knowledge about the main rationale behind gathering this data, and it's plausible that its significance is concentrated within the 2017-2020 period. Interestingly, we observed a decline in the frequency of observations between 2017-2020.
+
+* Regrettably, I couldn't attain a thorough comprehension of the variables "building_contractor" or "bi_id". In theory, I believe that contractors could play a role in determining project value. However, due to the coding of this variable, I encountered difficulties in creating a new categorical variable that could better encapsulate the essence of "building_contractor" and make it more usable for analysis.
+
+* Another noteworthy aspect of this analysis is the relatively large number of categories present within the chosen categorical variables. This abundance of categories can potentially complicate the interpretation of the analysis.
+
+**Am I Close to Answering My Main Research Question/Do I need to Refine the Research Question:**
+
+* Based on the evaluations made earlier, it appears that I am nearing a conclusion regarding my primary research inquiry, which involves identifying the factors impacting project value. I intend to focus on the mean project value, and for the purposes of building the model, I have selected the variables "type_of_work," the modified "property_use" (prop_use2), and a categorical representation of "year". This particular research inquiry is centered on constructing a predictive model designed to identify the variables that account for variations in the mean project value.
+
+* After the data exploration, I am also intrigued to build a confounding model that evaluates the impact of property usage on mean project value, while controlling for work type. This research question is focused on constructing a confounding model.  
+
+<!----------------------------------------------------------------------------->
+
+# Task 2: Tidy Your Data
+
+In this task, we will do several exercises to reshape our data. The goal here is to understand how to do this reshaping with the `tidyr` package.
+
+A reminder of the definition of *tidy* data:
+
+-   Each row is an **observation**
+-   Each column is a **variable**
+-   Each cell is a **value**
+
+## 2.1. Is My Data Tidy or Untidy? Explain  (2 points)
+
+Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have \>8 variables, just pick 8, and explain whether the data is untidy or tidy.
+
+<!--------------------------- Start your work below --------------------------->
+
+* Based on the below investigation, I have determined that my dataset adheres to the principles of a tidy dataset. 
+* Each row serves as an individual observation, without any duplicate measurements. 
+* Each column represents a distinct variable, and there are no absent values, as every cell contains data.
+
+
+```{r}
+
+### Assess how tidy the data is 
+
+# Select the variables that I will work with moving forward
+building_permits_selected <- prepared_building_data2 %>%
+  select(permit_number, issue_date, year, year_cat, project_value, value, type_of_work, prop_use2)
+
+#View the dataset
+view(building_permits_selected)
+
+# Check for duplicates in a "permit_number" column
+duplicates <- duplicated(building_permits_selected$permit_number)
+
+# Print the rows with duplicate values
+# print(duplicates) ### I have commented this out because the output is super long; no duplicates are identified!
+
+# Check for duplicates across the entire data frame
+duplicates_entiredata <- building_permits_selected[duplicated(building_permits_selected) | duplicated(building_permits_selected, fromLast = TRUE), ]
+
+# Print duplicates entire data
+print(duplicates_entiredata)
+
+# Calculate the total number of missing values in each column
+missing_values <- colSums(is.na(building_permits_selected))
+
+# Print missing values
+print(missing_values)
+
+
+```
+
+
+<!----------------------------------------------------------------------------->
+
+## 2.2. Untidy the Tidy Data! (4 points)
+
+Now, if your data is tidy, untidy it! Then, tidy it back to it's original state.
+
+If your data is untidy, then tidy it! Then, untidy it back to it's original state.
+
+Be sure to explain your reasoning for this task. Show us the "before" and "after".
+
+<!--------------------------- Start your work below --------------------------->
+
+To untidy a tidy dataset, I'll need to introduce redundancy, reshape the data, or combine information into single cells.The specific rationale for doing this depends on analysis needs or the requirements of a particular data visualization or modeling technique. 
+
+I intend to utilize the organized format of my existing data for the regression model and the rest of the questions. The reason for restructuring/untidying the data is to address the specific question posed in task2.2. I will also include brief explanations for each step I undertake and their potential applications.
+
+**Part 1:**
+
+```{r}
+
+### To view the tidy data before the untidy process, we can use the view()
+view(building_permits_selected) #tidy data
+
+### The provided codes will extract the month from the date column and then generate columns representing the 12 months of the year with their corresponding year values. Reorganizing the data in this manner assists in visually assessing whether we have data spanning all 12 months for the years 2017-2020 or if only specific months of the year contain data. Structuring the dataset in this way is also beneficial when conducting time-series analysis.
+
+ 
+# Extract the month from the 'issue_date' column
+untidy_building_data <- building_permits_selected %>%
+  mutate(month = month(as.Date(issue_date)))
+
+# Pivot the 'month' values into separate columns with 'year' values using the spread()
+untidy_building_data <- untidy_building_data %>%
+  spread(key = month, value = year)
+
+# Print the untidy data
+print(untidy_building_data)
+
+### Reverse the above code and return the data to its original form
+
+# Use gather to convert the wide format to a long format 
+tidy_building_data <- untidy_building_data %>%
+  gather(key = "month", value = "year", 
+         -permit_number, -issue_date, -year_cat, -value, -project_value, -type_of_work, -prop_use2, 
+         na.rm = TRUE)
+
+# Print the tidy data
+print(tidy_building_data)
+
+#Original tidy dataset
+Original_data <- tidy_building_data %>%
+  select(-month)
+
+#Print the original data
+print(Original_data)
+
+
+```
+
+
+**Part 2:**
+
+In part 2, I will Widen the dataset to display the 'type_of_work' for each categorical representation of the 'project_value,' with 'value' being placed into its individual column. This activity can simplifies data presentation. Widening data can make the data presentation more compact and easier to understand, especially when you have many rows of data with repeated values in a certain column.It can also improve readability and data visualization. 
+
+```{r}
+
+# Widen the data so that we see the type_of_work by each categorical representation of the project_value
+# Put "value" as its own column
+untidy_building_data2 <- building_permits_selected %>%
+    pivot_wider(names_from = value,
+                values_from = type_of_work)
+
+# Print the untidy data2
+print(untidy_building_data2)
+
+### Reverse the above code and return the data to its original form
+
+# Use pivot_longer to convert the wide format to a long format 
+tidy_building_data2 <- untidy_building_data2 %>%
+  pivot_longer(
+    cols = -c(permit_number, issue_date, year_cat, project_value, prop_use2, year),
+    names_to = "value", 
+    values_to = "type_of_work",
+    values_drop_na = TRUE
+  )
+
+# Print the tidy data, which should be now similar to the original dataset
+print(tidy_building_data2)
+
+```
+
+<!----------------------------------------------------------------------------->
+
+## 2.3. Pick Final Research Questions and Explain Your Decision (4 points)
+
+Now, you should be more familiar with your data, and also have made progress in answering your research questions. Based on your interest, and your analyses, pick 2 of the 4 research questions to continue your analysis in the remaining tasks:
+
+<!-------------------------- Start your work below ---------------------------->
+
+1.  *What factors are associated with higher or lower mean project values? For the purposes of building the model, I have selected the variables "type_of_work," the modified "property_use" (prop_use2), and a categorical representation of "year". This particular research inquiry is centered on constructing a predictive model designed to identify the variables that account for variations in the mean project value.
+
+2. What is the relationship between ***"project_value"*** and ***"property_use"***? I want to evaluate the impact of property usage on mean project value, while controlling for work type. This research question is focused on constructing a confounding model.
+
+<!----------------------------------------------------------------------------->
+
+Explain your decision for choosing the above two research questions.
+
+<!--------------------------- Start your work below --------------------------->
+
+**Impact of Q1:** This question is critical for understanding the multiple factors that contribute to project value. It can inform strategic planning, investment decisions, and resource allocation. Knowing which factors influence project values allows for better project management and targeted efforts to maximize project values.
+
+**Impact of Q2:** The impact of this question is important for disentangling the specific influence of "property_use" on "project_value" and for gaining a more accurate understanding of the factors affecting project values. It can help in decision-making related to property development and investment.
+
+
+In summary, the first question (predictive modeling) takes a broader approach, aiming to identify all factors influencing mean project values. Whereas the second question (confounding model) is more specific and deals with a particular variable's relationship while considering confounders.  
+
+Both questions have significant impacts in terms of decision-making and understanding the drivers of project values, but they serve slightly different analytical purposes.
+
+<!----------------------------------------------------------------------------->
+
+Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
+
+(If it makes more sense, then you can make/pick two versions of your data, one for each research question.)
+
+<!--------------------------- Start your work below--------------------------->
+
+Throughout the above process, I have already shaped my preferred dataset: "_building_permit_selected_". I have also used different filtering, cleaning functions already as demonstrated throughout this deliverable to produce this final selected dataset. Therefore, I will refrain from making any changes to this dataset. 
+
+```{r}
+# Selected and Tidy Data
+view(building_permits_selected)
+```
+
+
+# Task 3: Modelling
+
+## 3.0. Define the Independent Variable (no points)
+
+Pick a research question from 1.2, and pick a variable of interest (we'll call it "Y") that's relevant to the research question. Indicate these.
+
+<!-------------------------- Start your work below ---------------------------->
+
+**Research Question**: What factors are associated with higher or lower mean project value?
+
+**Variable of interest**: Mean "Project_value"
+
+<!----------------------------------------------------------------------------->
+
+## 3.1. Fit a Model (3 points)
+
+Fit a model or run a hypothesis test that provides insight on this variable with respect to the research question. Store the model object as a variable, and print its output to screen. We'll omit having to justify your choice, because we don't expect you to know about model specifics in STAT 545.
+
+-   **Note**: It's OK if you don't know how these models/tests work. Here are some examples of things you can do here, but the sky's the limit.
+
+    -   You could fit a model that makes predictions on Y using another variable, by using the `lm()` function.
+    -   You could test whether the mean of Y equals 0 using `t.test()`, or maybe the mean across two groups are different using `t.test()`, or maybe the mean across multiple groups are different using `anova()` (you may have to pivot your data for the latter two).
+    -   You could use `lm()` to test for significance of regression coefficients.
+
+<!-------------------------- Start your work below ---------------------------->
+
+**QUESTION:** What factors are associated with higher or lower mean project values? For the purposes of building the model, I have selected the variables "type_of_work," the modified "property_use" (prop_use2), and a categorical representation of "year". This particular research inquiry is centered on constructing a predictive model designed to identify the variables that account for variations in the mean project value.
+
+
+**Model Interpretation:**
+
+* This value (0.3879) represents the proportion of the variance in the mean "project_value" that is explained by the predictor variables in the model. In this case, about 38.79% of the variance is explained.
+
+* **type_of_workC:** This variable has a p-value of 1.76e-11, which is very close to zero. This indicates a highly significant relationship with the mean "project_value."
+
+* **prop_use2(Live_Work Use):** This variable has a p-value of 9.26e-05, also very close to zero, suggesting a highly significant relationship.
+
+* **prop_use(Office Use):** Although it has a p-value of 0.0979, which is just slightly above the common significance level of 0.05, it might still be considered marginally significant depending on the significance level chosen.
+
+```{r}
+
+# Calculate the mean 'project_value' by grouping the data by relevant predictors
+mean_project_data <- building_permits_selected %>%
+  group_by(type_of_work, prop_use2, year_cat) %>%
+  summarize(mean_project_value = mean(project_value, na.rm = TRUE))
+
+# Fit a multiple regression model to predict mean 'project_value' based on the specified predictors
+model1 <- lm(mean_project_value ~ type_of_work + prop_use2 + year_cat, data = mean_project_data)
+
+
+# Summarize the model
+summary(model1)
+model1_obj <- unclass(model1) ### not printing due to a long output
+
+
+```
+
+**QUESTION:** What is the relationship between ***"project_value"*** and ***"property_use"***? I want to evaluate the impact of property usage on mean project value, while controlling for work type. This research question is focused on constructing a confounding model.
+
+I'd like to begin by conducting a t-test to investigate whether there are variations in the mean project value among various categories of 'prop_use2'. Following that, I intend to build a regression model to evaluate the influence of 'prop_use2' on the mean project value while considering the influence of the 'type of work'.
+
+**Model Interpretation:**
+
+* When controlling for work type, only the property usage (Live Work, p=6.18e-05), indicated a significant effect on project value.
+
+* The adjusted R-squared is 0.324, indicating that after adjusting for the number of independent variables, about 32.4% of the variability in the mean project value is explained by the model.
+
+* The low p-value (1.103e-11) indicates that the model as a whole is statistically significant, suggesting that at least one independent variable is related to the mean project value.
+
+
+```{r}
+
+# Perform t-tests for each category of 'prop_use2' against the overall mean 'project_value'
+t_test_results <- building_permits_selected %>%
+  group_by(prop_use2) %>%
+  summarise(t_statistic = t.test(project_value)$statistic,
+            p_value = t.test(project_value)$p.value)
+
+# View the results
+print(t_test_results)
+
+# Fit a multiple regression model to assess the impact of 'prop_use2' on mean 'project_value' while controlling for 'type_of_work'
+model2 <- lm(mean_project_value ~ prop_use2 + type_of_work, data = mean_project_data)
+
+# Summarize the model
+summary(model2)
+model2_obj <- unclass(model2) ### not printing due to a long output
+```
+
+
+<!----------------------------------------------------------------------------->
+
+## 3.2. Produce the Relevant Results from the Fitted Models (3 points)
+
+Produce something relevant from your fitted model: either predictions on Y, or a single value like a regression coefficient or a p-value.
+
+-   Be sure to indicate in writing what you chose to produce.
+-   Your code should either output a tibble (in which case you should indicate the column that contains the thing you're looking for), or the thing you're looking for itself.
+-   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
+
+<!-------------------------- Start your work below ---------------------------->
+
+**The broom::tidy function:**
+
+* It is used to extract model coefficients and related statistics from a fitted model. It produces a tibble that typically includes the following columns:
+
+* **term:** This column contains the names of model parameters, which are usually the predictor variables and the intercept (if present).
+
+* **statistic:** The statistic column typically includes the t-statistic for hypothesis testing, which is calculated as the ratio of the coefficient estimate to its standard error.
+
+* **p.value:** The p-value column shows the two-tailed p-value associated with the t-statistic. It is used to test the null hypothesis that the coefficient is equal to zero.
+
+
+```{r}
+
+# The tidy() function extracts various statistics related to the model, including coefficients, standard errors, t-values, and p-values, into a tibble.
+
+### Model 1
+broom_tidy1 <- broom::tidy(model1)
+
+# Extract term, p-value, and coefficients
+selected_results <- broom_tidy1 %>% 
+  select(term, p.value, estimate)
+
+# Print the selected results
+print(selected_results)
+
+
+### Model 2
+broom_tidy2 <- broom::tidy(model2)
+
+# Extract term, p-value, and coefficients
+selected_results2 <- broom_tidy2 %>% 
+  select(term, p.value, estimate)
+
+# Print the selected results
+print(selected_results2)
+```
+
+**The broom::augment function:** 
+
+* It is used to augment or extend the original dataset with additional information related to a model's predictions and residuals. It typically produces a tibble that includes the following columns:
+
+* **Original Data:** The columns from the original dataset are retained, allowing you to see the original predictors and response variable.
+
+* **Fitted Values:** This column contains the predicted or fitted values generated by the model for each observation in the dataset.
+
+* **Residuals:** The residuals represent the difference between the observed values (actual data) and the predicted values generated by the model. In other words, it measures how far each data point is from the model's prediction.
+
+
+```{r}
+
+#The broom::augment function is used to augment or extend the original dataset with additional information related to a model's predictions and residuals.
+
+### Model 1
+
+# Use broom's augment() function to extract model augmentation
+augmentation1 <- broom::augment(model1)
+
+# Extract original data, fitted values, and residuals
+selected_augmentation1 <- augmentation1 %>%
+  select(mean_project_value, type_of_work, prop_use2, year_cat, .fitted, .resid)
+
+# Print the selected augmentation
+print(selected_augmentation1)
+
+
+### Model 2
+
+# Use broom's augment() function to extract model augmentation
+augmentation2 <- broom::augment(model2)
+
+# Extract original data, fitted values, and residuals
+selected_augmentation2 <- augmentation2 %>%
+  select(mean_project_value, type_of_work, prop_use2, .fitted, .resid)
+
+# Print the selected augmentation
+print(selected_augmentation2)
+```
+
+**The broom::glance function:** 
+
+* It is used to extract a concise summary or glance at various goodness-of-fit and model assessment statistics for a fitted model. It produces a tibble with a single row containing summary statistics that provide an overview of how well the model fits the data. The specific statistics included may vary depending on the type of model, but common statistics found in the glance tibble include:
+
+* **AIC (Akaike Information Criterion):** A measure of the model's goodness of fit, balancing the trade-off between model complexity and fit to the data. Lower AIC values indicate better-fitting models.
+
+* **BIC (Bayesian Information Criterion):** Similar to AIC, BIC is another measure of model fit that accounts for model complexity. Lower BIC values are preferred.
+
+* **R-squared:** The coefficient of determination, which represents the proportion of variance in the dependent variable explained by the model. Higher R-squared values indicate better model fit.
+
+* **Adjusted R-squared:** A modified version of R-squared that accounts for the number of predictors in the model. It penalizes the inclusion of unnecessary variables.
+
+* **Log-Likelihood:** The log-likelihood of the model, a measure of how well the model explains the data.
+
+* **Deviance:** A measure of goodness of fit for generalized linear models (GLMs). It quantifies the difference between the observed data and the model's predictions.
+
+* **Residual Deviance:** A version of deviance after model fitting in GLMs.
+
+* **Null Deviance:** Deviance for a null model with no predictors. It helps assess whether the model provides better fit than a null model.
+
+
+```{r}
+#The broom::glance function is used to extract a concise summary or glance at various goodness-of-fit and model assessment statistics for a fitted model
+
+### Model1
+broom::glance(model1)
+
+### Model2
+broom::glance(model2)
+
+```
+
+
+<!----------------------------------------------------------------------------->
+
+# Task 4: Reading and writing data
+
+Get set up for this exercise by making a folder called `output` in the top level of your project folder / repository. You'll be saving things there.
+
+## 4.1. Make a CSV file in the Output Folder (3 points)
+
+Take a summary table that you made from Task 1, and write it as a csv file in your `output` folder. Use the `here::here()` function.
+
+-   **Robustness criteria**: You should be able to move your Mini Project repository / project folder to some other location on your computer, or move this very Rmd file to another location within your project repository / folder, and your code should still work.
+-   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
+
+<!-------------------------- Start your work below ---------------------------->
+
+```{r}
+
+summary_table <- projval_by_year
+
+#Define the output file path using here::here()
+output_file <- here::here("output", "summary_table.csv")
+
+#Write the summary table to a CSV file
+write.csv(summary_table, file = output_file, row.names = FALSE)
+
+#Print a message to confirm where the file was saved
+cat("Summary table saved to:", output_file, "\n")
+
+```
+
+<!----------------------------------------------------------------------------->
+
+## 4.2. Save Model Objects (3 points)
+
+Write your model object from Task 3 to an R binary file (an RDS), and load it again. Be sure to save the binary file in your `output` folder. Use the functions `saveRDS()` and `readRDS()`.
+
+-   The same robustness and reproducibility criteria as in 4.1 apply here.
+
+<!-------------------------- Start your work below ---------------------------->
+
+```{r}
+
+######### Model 1 ######### 
+
+# Save model1 object to an RDS file
+model1_file <- here::here("output", "saved_model1.rds")
+saveRDS(model1, file = model1_file)
+
+# Print a message to confirm where the file was saved
+cat("Model object saved to:", model1_file, "\n")
+
+# Load the saved model object from the RDS file
+loaded_model1 <- readRDS(model1_file)
+
+print(loaded_model1)
+
+
+######### Model 2 ######### 
+
+# Save model2 object to an RDS file
+model2_file <- here::here("output", "saved_model2.rds")
+saveRDS(model2, file = model2_file)
+
+# Print a message to confirm where the file was saved
+cat("Model object saved to:", model2_file, "\n")
+
+# Load the saved model object from the RDS file
+loaded_model2 <- readRDS(model2_file)
+
+print(loaded_model2)
+
+```
+
+<!----------------------------------------------------------------------------->
+
+# Overall Reproducibility/Cleanliness/Coherence Checklist
+
+Here are the criteria we're looking for.
+
+## Coherence (0.5 points)
+
+The document should read sensibly from top to bottom, with no major continuity errors.
+
+The README file should still satisfy the criteria from the last milestone, i.e. it has been updated to match the changes to the repository made in this milestone.
+
+## File and folder structure (1 points)
+
+You should have at least three folders in the top level of your repository: one for each milestone, and one output folder. If there are any other folders, these are explained in the main README.
+
+Each milestone document is contained in its respective folder, and nowhere else.
+
+Every level-1 folder (that is, the ones stored in the top level, like "Milestone1" and "output") has a `README` file, explaining in a sentence or two what is in the folder, in plain language (it's enough to say something like "This folder contains the source for Milestone 1").
+
+## Output (1 point)
+
+All output is recent and relevant:
+
+-   All Rmd files have been `knit`ted to their output md files.
+-   All knitted md files are viewable without errors on Github. Examples of errors: Missing plots, "Sorry about that, but we can't show files that are this big right now" messages, error messages from broken R code
+-   All of these output files are up-to-date -- that is, they haven't fallen behind after the source (Rmd) files have been updated.
+-   There should be no relic output files. For example, if you were knitting an Rmd to html, but then changed the output to be only a markdown file, then the html file is a relic and should be deleted.
+
+Our recommendation: delete all output files, and re-knit each milestone's Rmd file, so that everything is up to date and relevant.
+
+## Tagged release (0.5 point)
+
+You've tagged a release for Milestone 2.
+
+### Attribution
+
+Thanks to Victor Yuan for mostly putting this together.
